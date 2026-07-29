@@ -8,13 +8,6 @@
 node -v
 npm -v
 ```
-
-**MySQL** — install MySQL Community Server for Windows:
-1. Download the installer from https://dev.mysql.com/downloads/installer/
-2. Run it, choose the "Server only" (or "Developer Default") setup type.
-3. During setup, set a root password — remember it, you'll need it below.
-4. Finish the wizard; MySQL runs as a Windows service automatically after install.
-
 Create the database. Open **MySQL Command Line Client** (or MySQL Workbench) from the Start menu and run:
 ```sql
 CREATE DATABASE pos_system;
