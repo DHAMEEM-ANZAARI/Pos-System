@@ -99,5 +99,5 @@ npm run build
 npm start
 
 cd ..\frontend
-npm run build   # outputs static files to frontend\dist
+npm run build  
 ```
