@@ -1,0 +1,121 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  cashier
+  manager
+  admin
+}
+
+enum PaymentMethod {
+  cash
+  card
+  wallet
+}
+
+enum OrderStatus {
+  completed
+  refunded
+}
+
+enum LedgerReason {
+  sale
+  restock
+  adjustment
+  refund
+}
+
+model Store {
+  id        Int      @id @default(autoincrement())
+  name      String
+  location  String
+  taxRate   Float    @default(0.18)
+  users     User[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model User {
+  id            Int               @id @default(autoincrement())
+  name          String
+  email         String            @unique
+  password      String
+  role          Role              @default(cashier)
+  storeId       Int?
+  store         Store?            @relation(fields: [storeId], references: [id])
+  orders        Order[]
+  ledgerEntries InventoryLedger[]
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+}
+
+model Product {
+  id             Int               @id @default(autoincrement())
+  name           String
+  sku            String            @unique
+  category       String
+  price          Float
+  costPrice      Float             @default(0)
+  size           String?
+  color          String?
+  stock          Int               @default(0)
+  reorderPoint   Int               @default(5)
+  active         Boolean           @default(true)
+  orderLineItems OrderLineItem[]
+  ledgerEntries  InventoryLedger[]
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+
+  @@index([category])
+  @@index([name])
+}
+
+model Order {
+  id            Int               @id @default(autoincrement())
+  orderNumber   String            @unique
+  cashierId     Int
+  cashier       User              @relation(fields: [cashierId], references: [id])
+  lineItems     OrderLineItem[]
+  subtotal      Float
+  taxAmount     Float
+  discount      Float             @default(0)
+  total         Float
+  paymentMethod PaymentMethod
+  status        OrderStatus       @default(completed)
+  ledgerEntries InventoryLedger[]
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+}
+
+model OrderLineItem {
+  id        Int     @id @default(autoincrement())
+  orderId   Int
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId Int
+  product   Product @relation(fields: [productId], references: [id])
+  name      String
+  sku       String
+  unitPrice Float
+  quantity  Int
+  lineTotal Float
+}
+
+model InventoryLedger {
+  id            Int          @id @default(autoincrement())
+  productId     Int
+  product       Product      @relation(fields: [productId], references: [id])
+  change        Int
+  reason        LedgerReason
+  orderId       Int?
+  order         Order?       @relation(fields: [orderId], references: [id])
+  performedById Int
+  performedBy   User         @relation(fields: [performedById], references: [id])
+  balanceAfter  Int
+  createdAt     DateTime     @default(now())
+}
