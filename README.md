@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Counter · POS — Omnichannel Retail POS & Inventory Management System
 
 Project 1 from the Infotact internship spec, built as a working MVP:
@@ -126,3 +127,6 @@ npm run build   # outputs static files to frontend\dist
 - **`Can't reach database server`**: MySQL service isn't running, or `DATABASE_URL` has the wrong password/port. Check the MySQL80 service is started in Windows Services (`services.msc`).
 - **`Access denied for user 'root'`**: password in `.env` doesn't match what you set during MySQL install.
 - **`npx prisma migrate dev` fails**: make sure the `pos_system` database exists (see step 1) and the connection string's database name matches it.
+=======
+# Pos-System
+>>>>>>> 33685ab1583dad09a3d268d708eef7d377367ed5
