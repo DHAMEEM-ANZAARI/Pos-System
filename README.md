@@ -1,16 +1,7 @@
-<<<<<<< HEAD
-# Counter · POS — Omnichannel Retail POS & Inventory Management System
 
-Project 1 from the Infotact internship spec, built as a working MVP:
-- **Backend**: Node.js, Express, TypeScript, **MySQL via Prisma ORM**, JWT auth, RBAC (cashier/manager/admin)
-- **Frontend**: React, TypeScript, Tailwind CSS, Vite — a receipt/ledger-styled POS terminal
-- **Core flows**: unified product catalog, real-time POS checkout, atomic stock decrement + inventory ledger, low-stock alerts & restocking, order history & refunds
+# Inventory Management System
 
-## What's implemented vs. the full spec
-
-This is a complete, runnable MVP covering the functional core of the spec (auth/RBAC, catalog, POS checkout, atomic inventory, low-stock alerts, order/refund flow). Redis caching, Docker/CI pipelines, and multi-store geo-routing were intentionally left out to keep local setup simple. Checkout runs inside a real Prisma/MySQL transaction: each line item is decremented with an atomic `UPDATE ... WHERE stock >= quantity` guard, and if any item fails (insufficient stock), the whole transaction rolls back — so nothing oversells.
-
-## 1. Install prerequisites (Windows)
+## 1. Install prerequisites
 
 **Node.js** — download the LTS installer from https://nodejs.org and run it. Verify in PowerShell:
 ```powershell
@@ -29,16 +20,7 @@ Create the database. Open **MySQL Command Line Client** (or MySQL Workbench) fro
 CREATE DATABASE pos_system;
 ```
 
-*(Alternative if you don't want to install MySQL locally: use a free hosted MySQL instance from [PlanetScale](https://planetscale.com) or [Railway](https://railway.app) and skip straight to using their connection string in step 3.)*
-
-## 2. Unzip the project
-
-```powershell
-cd Downloads
-Expand-Archive pos-system.zip -DestinationPath pos-system
-```
-
-## 3. Backend setup
+## 2. Backend setup
 
 ```powershell
 cd pos-system\backend
@@ -66,8 +48,6 @@ npm run dev
 ```
 You should see `[server] listening on http://localhost:5000`. Leave this window open.
 
-> Tip: `npx prisma studio` opens a browser-based table viewer/editor for your MySQL data if you want to inspect it directly.
-
 Demo accounts created by the seed script (password for all: `password123`):
 
 | Role    | Email             |
@@ -76,7 +56,7 @@ Demo accounts created by the seed script (password for all: `password123`):
 | Manager | manager@pos.test  |
 | Cashier | cashier@pos.test  |
 
-## 4. Frontend setup
+## 3. Frontend setup
 
 Open a **second** PowerShell window:
 ```powershell
@@ -86,14 +66,14 @@ npm run dev
 ```
 You should see a `Local: http://localhost:5173/` link. Vite proxies `/api` to `http://localhost:5000`, so no extra config is needed.
 
-## 5. Use it
+## 4. Use it
 
 Open **http://localhost:5173** and sign in with one of the demo accounts above.
 
 - **Cashier**: search/add products to the cart on the Terminal page, adjust quantities, pick a payment method, and hit Charge.
 - **Manager/Admin**: also get **Catalog** (add/edit/deactivate products), **Inventory** (low-stock alerts + restock), and refund permissions on **Orders**.
 
-## 6. API overview
+## 5. API overview
 
 | Method | Route                          | Access          |
 |--------|---------------------------------|-----------------|
@@ -111,7 +91,7 @@ Open **http://localhost:5173** and sign in with one of the demo accounts above.
 | POST   | /api/inventory/adjust            | manager/admin   |
 | GET    | /api/inventory/ledger/:productId | manager/admin   |
 
-## 7. Production build
+## 6. Production build
 
 ```powershell
 cd backend
@@ -121,12 +101,3 @@ npm start
 cd ..\frontend
 npm run build   # outputs static files to frontend\dist
 ```
-
-## Troubleshooting
-
-- **`Can't reach database server`**: MySQL service isn't running, or `DATABASE_URL` has the wrong password/port. Check the MySQL80 service is started in Windows Services (`services.msc`).
-- **`Access denied for user 'root'`**: password in `.env` doesn't match what you set during MySQL install.
-- **`npx prisma migrate dev` fails**: make sure the `pos_system` database exists (see step 1) and the connection string's database name matches it.
-=======
-# Pos-System
->>>>>>> 33685ab1583dad09a3d268d708eef7d377367ed5
