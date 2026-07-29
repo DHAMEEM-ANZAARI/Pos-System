@@ -84,13 +84,4 @@ Open **http://localhost:5173** and sign in with one of the demo accounts above.
 | POST   | /api/inventory/adjust            | manager/admin   |
 | GET    | /api/inventory/ledger/:productId | manager/admin   |
 
-## 6. Production build
 
-```powershell
-cd backend
-npm run build
-npm start
-
-cd ..\frontend
-npm run build  
-```
